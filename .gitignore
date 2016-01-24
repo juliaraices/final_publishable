@@ -1,0 +1,12 @@
+## ignore  folders:
+graphs/
+input/
+output/
+
+## ignore logs
+*.log
+*.output
+*.swp
+
+## ignore Rhistory
+.Rhistory
