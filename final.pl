@@ -138,7 +138,7 @@ while(<EXP>){
 	else{
 		$Group="Impossible";
 	}
-	$exp_data{$exp[3]}="$exp[3]\t$exp[5]\t$exp[6]\t$exp[7]\t$exp[8]\t$exp[9]\t$exp[10]$XorA\t$Group";
+	$exp_data{$exp[3]}="$exp[3]\t$exp[5]\t$exp[6]\t$exp[7]\t$exp[8]\t$exp[9]\t$exp[10]\t$XorA\t$Group";
 	$j++;
 	#print "$exp[3]\n";
 }
