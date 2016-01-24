@@ -147,14 +147,14 @@ while(<EXP>){
 foreach $key (keys %exp_data){
 #print "in foreach\n";
 	#print "got above if\n";
-	if($age_data{$exp[3]}){
+	if($age_data{$key} ne ""){
 		$m++;
 		if($dnds_data{$key} ne ""){
 			print OUTPUT "$exp_data{$key}\t$age_data{$key}\t$dnds_data{$key}\n";
 			$n++;
 		}
 		else{
-			print OUTPUT "$exp_data{$key}\t$age_data{$key}\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n";
+			print OUTPUT "$exp_data{$key}\t$age_data{$key}\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\tNA\n";
 			$o++;
 		}
 	}
