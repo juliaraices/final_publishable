@@ -6,8 +6,8 @@
 use strict; # doesn't let you use variables without declaring them
 
 # declared variables:
-my ($exps, $dnds, $age, $lines, $line, $lin, $i, $j, $k, $l, $m, $n, $o, $key); # counters and strings
-my ($Group, $XorA, $OorN); # strings to be printed
+my ($exps, $dnds, $age, $lines, $line, $lin, $i, $j, $k, $l, $m, $n, $o, $key, $value_dnds, $value_pnps); # counters and strings
+my ($Group, $XorA, $OorN, $controle7, $controle8, $haploid); # strings to be printed
 my (@exp, @ages, @dndss); # arrays with raw data
 my (%exp_data, %dnds_data, %age_data); # hashs with printable data
 
@@ -29,6 +29,11 @@ undef $key;
 undef $Group;
 undef $XorA;
 undef $OorN;
+undef $value_dnds;
+undef $value_pnps;
+undef $controle7;
+undef $controle8;
+undef $haploid;
 undef @exp;
 undef @ages;
 undef @dndss;
@@ -68,7 +73,8 @@ unless(open(EXP, $exps) && open(DNDS, $dnds) && open(AGE, $age)){
 
 # open output files, and prints header in it
 open(OUTPUT, ">final.output");
-print OUTPUT "id\tMitosis\tMeiosis\tPostMeiosis\tMitosisPostmeiosis\tMeiosisPostmeiosis\tMisosisMeiosis\tXorA\tGroup\tage\tbias\tdn\tds\tdnds\tpn\tps\tpnps\tln\tls\tfetValue\tneutrality\talpha\n";
+print OUTPUT 
+"id\tMitosis\tMeiosis\tPostMeiosis\tMitosisPostmeiosis\tMeiosisPostmeiosis\tMitosisMeiosis\tChromosome\tXorA\tClass\tGroup\tHaploidGroup\tMeiosisControlForHaploids\tPostmeiosisControlForHaploids\tbranch\tage\tbias\tdn\tds\tdnds\tpn\tps\tpnps\tln\tls\tfetValue\tneutrality\talpha\n";
 
 # get dn and ds data from dNdS table
 while(<DNDS>){
@@ -76,7 +82,19 @@ while(<DNDS>){
 	chomp $line;
 	@dndss=split(/\t/, $line);
 	if($line=~/Symbol/){}
-	$dnds_data{$dndss[13]}="$dndss[4]\t$dndss[2]\t$dndss[4]/$dndss[2]\t$dndss[5]\t$dndss[3]\t$dndss[5]/$dndss[3]\t$dndss[6]\t$dndss[7]\t$dndss[8]\t$dndss[10]\t$dndss[11]";
+	if($dndss[2] != 0){
+		$value_dnds=$dndss[4]/$dndss[2];
+	}
+	else{
+		$value_dnds="NaN";
+	}
+	if($dndss[3] != 0){
+		$value_pnps=$dndss[5]/$dndss[3];
+	}
+	else{
+		$value_pnps="NaN";
+	}
+	$dnds_data{$dndss[13]}="$dndss[4]\t$dndss[2]\t$value_dnds\t$dndss[5]\t$dndss[3]\t$value_pnps\t$dndss[6]\t$dndss[7]\t$dndss[8]\t$dndss[10]\t$dndss[11]";
 	$k++;
 	#print "$dndss[13]\n";
 }
@@ -93,7 +111,7 @@ while(<AGE>){
 	else{
 		$OorN="new";
 	}
-	$age_data{$ages[0]}="$OorN\t$ages[3]";
+	$age_data{$ages[0]}="$ages[2]\t$OorN\t$ages[3]";
 	$l++;
 	#print "$ages[0]\n";
 }
@@ -105,9 +123,9 @@ while(<EXP>){
 	@exp=split(/\|/, $lines);
 	if($lines=~/Symbol/){}
 	# make new group for genes according to their classes, and adress if they are Autosomal or X-linked
-	if($exp[3] eq "---"){
-		$exp[3] = $exp[1];
-	}
+	#if($exp[3] eq "---"){
+	#$exp[3] = $exp[1];
+	#}
 	if($exp[4] eq "arm_X"){
 		$XorA="X";
 	}
@@ -138,13 +156,31 @@ while(<EXP>){
 	else{
 		$Group="Impossible";
 	}
-	$exp_data{$exp[3]}="$exp[3]\t$exp[5]\t$exp[6]\t$exp[7]\t$exp[8]\t$exp[9]\t$exp[10]\t$XorA\t$Group";
+	if($Group eq "Meiotic" || $Group eq "MeioticPostmeiotic" || $Group eq "PostMeiotic"){
+		$haploid = "haploid_group";
+	}
+	else{
+		$haploid = "no";
+	}
+	if($Group eq "Equal" && $exp[6] >= 6.579){
+		$controle7 = "control_meiosis";
+	}
+	else{
+		$controle7 = "no";
+	}
+	if($Group eq "Equal" && $exp[7] >= 7.208){
+		$controle8 = "control_postmeiosis";
+	}
+	else{
+		$controle8 = "no";
+	}
+	$exp_data{$exp[3]}="$exp[3]\t$exp[5]\t$exp[6]\t$exp[7]\t$exp[8]\t$exp[9]\t$exp[10]\t$exp[4]\t$XorA\t$exp[11]\t$Group\t$haploid\t$controle7\t$controle8";
 	$j++;
 	#print "$exp[3]\n";
 }
 #$key = $exp[3];
 # prints data in output. gives an NA (Not Avaiable) for not avaiable dn/ds data.
-foreach $key (keys %exp_data){
+foreach $key (keys %exp_data){ # as a foreach was used, there are only uniq copies of each CG in the final output file.
 #print "in foreach\n";
 	#print "got above if\n";
 	if($age_data{$key} ne ""){

@@ -10,3 +10,9 @@ output/
 
 ## ignore Rhistory
 .Rhistory
+
+# ignore files:
+*.pdf
+*.jpg
+*.png
+*.txt
