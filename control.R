@@ -13,7 +13,7 @@ haploid <- subset(droso, droso$Group=="Meiotic" | droso$Group=="PostMeiotic" | d
 
 bootz <- rep("NA", 100)
 
-for(i in 1:100){
+for(i in 1:2){
     repeat{
         temp <- sample(equal, length(meiotic))
         blabs <- wilcox.test(temp$Meiosis, meiotic$Meiosis)
@@ -22,4 +22,6 @@ for(i in 1:100){
     will <- wilcox.test(temp$alpha, meiotic$alpha)
     bootz <- will$p.value
 }
+
+bootz
 
