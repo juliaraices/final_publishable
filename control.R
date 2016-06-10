@@ -10,16 +10,13 @@ meiotic <- subset(droso, droso$Group=="Meiotic")
 post <- subset(droso, droso$Group=="PostMeiotic")
 
 haploid <- subset(droso, droso$Group=="Meiotic" | droso$Group=="PostMeiotic" | droso$Group=="MeioticPostmeiotic")
-
+    
 bootz <- rep("NA", 100)
 
-<<<<<<< HEAD
 for(i in 1:2){
-=======
 # 1st try
 a = 0
 for(i in 1:100){
->>>>>>> 518dd22773e1c81c88ec925843b9592bc37f7d4c
     repeat{
         eq <- equal
         temp <- eq[sample(nrow(eq), length(meiotic$Meiosis)), ]
@@ -32,9 +29,7 @@ for(i in 1:100){
     bootz <- will$p.value
 }
 
-<<<<<<< HEAD
 bootz
-=======
 
 
 # 2nd try
@@ -91,6 +86,4 @@ for(i in 1:100){
 }
 
 
-
->>>>>>> 518dd22773e1c81c88ec925843b9592bc37f7d4c
 
