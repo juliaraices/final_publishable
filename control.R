@@ -10,23 +10,25 @@ meiotic <- subset(droso, droso$Group=="Meiotic")
 post <- subset(droso, droso$Group=="PostMeiotic")
 
 haploid <- subset(droso, droso$Group=="Meiotic" | droso$Group=="PostMeiotic" | droso$Group=="MeioticPostmeiotic")
-    
+
 bootz <- rep("NA", 100)
 
-for(i in 1:2){
 # 1st try
 a = 0
-for(i in 1:100){
+b = 0
+for(i in 1:2){
     repeat{
         eq <- equal
-        temp <- eq[sample(nrow(eq), length(meiotic$Meiosis)), ]
+        temp <- eq[sample(nrow(eq), 200, replace = TRUE), ]
         blabs <- wilcox.test(temp$Meiosis, meiotic$Meiosis)
         a <- a+1
         print(a)
         if(blabs$p.value >= 0.05) break
     }
+    a=0
+    b <- b+1
     will <- wilcox.test(temp$alpha, meiotic$alpha)
-    bootz <- will$p.value
+    bootz[b] <- will$p.value
 }
 
 bootz
@@ -37,7 +39,7 @@ b = 0
 for(i in 1:100){
     while(TRUE){
         eq <- equal
-        temp <- eq[sample(nrow(eq), length(meiotic$Meiosis)), ]
+        temp <- eq[sample(nrow(eq), 2), ]
         blabs <- wilcox.test(temp$Meiosis, meiotic$Meiosis)
         b <- b+1
         print(b)

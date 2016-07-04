@@ -47,35 +47,35 @@ meioticpostmeiotic.a <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="A")
 meioticpostmeiotic.x <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="X")
 
 
-control.1 <- subset(equal, equal$PostMeiosis >=7.253) # control for 
+control.1 <- subset(equal, equal$PostMeiosis >=7.253) #pos
 control.1.a <- subset(control.1, control.1$XorA=="A")
 control.1.x <- subset(control.1, control.1$XorA=="X")
 
-control.2 <- subset(equal, equal$Meiosis >= 7.423)
+control.2 <- subset(equal, equal$Meiosis >= 7.423) #mei
 control.2.a <- subset(control.2, control.2$XorA=="A")
 control.2.x <- subset(control.2, control.2$XorA=="X")
 
-control.3 <- subset(equal, equal$PostMeiosis >= 9.102)
+control.3 <- subset(equal, equal$PostMeiosis >= 9.102) #meipos$Pos
 control.3.a <- subset(control.3, control.3$XorA=="A")
 control.3.x <- subset(control.3, control.3$XorA=="X")
 
-control.4 <- subset(equal, equal$Meiosis >= 8.346)
+control.4 <- subset(equal, equal$Meiosis >= 8.346) #meipos$Mei
 control.4.a <- subset(control.4, control.4$XorA=="A")
 control.4.x <- subset(control.4, control.4$XorA=="X")
 
-control.5 <- subset(equal, equal$Meiosis>=7.708)
+control.5 <- subset(equal, equal$Meiosis>=7.708) #mei.meipos
 control.5.a <- subset(control.5, control.5$XorA=="A")
 control.5.x <- subset(control.5, control.5$XorA=="X")
 
-control.6 <- subset(equal, equal$PostMeiosis>=7.402)
+control.6 <- subset(equal, equal$PostMeiosis>=7.402) #meipos.pos
 control.6.a <- subset(control.6, control.6$XorA=="A")
 control.6.x <- subset(control.6, control.6$XorA=="X")
 
-control.7 <- subset(equal, equal$Meiosis>=6.579)
+control.7 <- subset(equal, equal$Meiosis>=6.603) #mei.meipos.pos$Mei
 control.7.a <- subset(control.7, control.7$XorA=="A")
 control.7.x <- subset(control.7, control.7$XorA=="X")
 
-control.8 <- subset(equal, equal$PostMeiosis>=7.208)
+control.8 <- subset(equal, equal$PostMeiosis>=7.208) #mei.meipos.pos$Pos
 control.8.a <- subset(control.8, control.8$XorA=="A")
 control.8.x <- subset(control.8, control.8$XorA=="X")
 
@@ -296,7 +296,7 @@ dev.off()
 wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"), subset(control.7$alpha, control.7$age=="new"))
 
 summary(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"))
-summary(subset(control.8$alpha, control.8$age=="new"))
+summary(subset(control.7$alpha, control.7$age=="new"))
 
 ####################### Figure 3 Color #########################
 pdf("figure3_color.pdf", width=15, height=10)#, res=300) # width=22, height=10, 
