@@ -33,6 +33,12 @@ for(i in 1:100){
 
 bootz
 
+sink("out_cross.txt")
+print("Output do programa cross.R\n\n\n")
+print(bootz)
+
+sink()
+
 # 
 # # 2nd try
 # b = 0
