@@ -19,7 +19,7 @@ b = 0
 for(i in 1:100){
     repeat{
         eq <- equal
-        temp <- eq[sample(nrow(eq), 200, replace = TRUE), ]
+        temp <- eq[sample(nrow(eq), 50, replace = TRUE), ]
         blabs <- wilcox.test(temp$Meiosis, meiotic$Meiosis)
         a <- a+1
         print(a)
