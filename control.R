@@ -8,12 +8,16 @@
 droso <- read.table("final.output", header=T)
 
 equal <- subset(droso, droso$Group=="Equal")
+equal.d <- subset(equal, equal$dn != "NA")
 
 meiotic <- subset(droso, droso$Group=="Meiotic")
+meiotic.d <- subset(meiotic, meiotic$dn != "NA")
 
 post <- subset(droso, droso$Group=="PostMeiotic")
+post.d <- subset(post, post$dn != "NA")
 
 haploid <- subset(droso, droso$Group=="Meiotic" | droso$Group=="PostMeiotic" | droso$Group=="MeioticPostmeiotic")
+haploid.d <- subset(haploid, haploid$dn != "NA")
 
 bootz <- rep("NA", 100)
 
@@ -23,16 +27,16 @@ a = 0
 b = 0
 for(i in 1:100){
     repeat{
-        eq <- equal
+        eq <- equal.d
         temp <- eq[sample(nrow(eq), 500, replace = TRUE), ]
-        blabs <- wilcox.test(temp$Meiosis, meiotic$Meiosis)
+        blabs <- wilcox.test(temp$Meiosis, meiotic.d$Meiosis, na.action=rm)
         a <- a+1
         print(a)
         if(blabs$p.value >= 0.05) break
     }
     a=0
     b <- b+1
-    will <- wilcox.test(temp$alpha, meiotic$alpha)
+    will <- wilcox.test(temp$alpha, meiotic.d$alpha, na.action=rm)
     bootz[b] <- will$p.value
 }
 
