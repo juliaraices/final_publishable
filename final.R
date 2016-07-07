@@ -3,87 +3,102 @@
 # - make controls
 # - make graphs 1, 2, 3, 4, suplementals et al
 
+# reads the output
 total <- read.table("final.output", header=T)
-#total <- subset(totaal, totaal$fetValue<=0.05)
 total$age <- factor(total$age, levels=c("old","new"))
 total$dnds <- as.numeric(total$dnds)
+# creates a subgroup of autosomal genes
 total.a <- subset(total, total$XorA=="A")
 
-
-summary(subset(total$Meiosis, total$age=="old"))
-summary(total$Mitosis)
-#max(total$Mitosis)
-
+# creates a subset for genes with dN data (positive selection signature)
 al <- subset(total, total$dn != "NA")
 
+### Groups are related to expression during spermatogenesis
+# creates a subset with genes from Equal expression category
 equal <- subset(al, al$Group=="Equal")
 
+# subset for PostMeiotic genes (and the sub-subsets for autosomal and X-linked genes)
 postmeiotic <- subset(al, al$Group=="PostMeiotic")
 postmeiotic.a <- subset(postmeiotic, postmeiotic$XorA=="A")
 postmeiotic.x <- subset(postmeiotic, postmeiotic$XorA=="X")
 
+# subset for Meiotic genes (and the sub-subsets for autosomal and X-linked genes)
 meiotic <- subset(al, al$Group=="Meiotic")
 meiotic.a <- subset(meiotic, meiotic$XorA=="A")
 meiotic.x <- subset(meiotic, meiotic$XorA=="X")
 
+# subset for Mitotic genes (and the sub-subsets for autosomal and X-linked genes)
 mitotic <- subset(al, al$Group=="Mitotic")
 mitotic.a <- subset(mitotic, mitotic$XorA=="A")
 mitotic.x <- subset(mitotic, mitotic$XorA=="X")
 
+# subset for Meiotic + MeioticPostMeiotic genes (and the sub-subsets for autosomal and X-linked genes)
 meiotic.meioticpostmeiotic <- subset(al, al$Group=="Meiotic" | al$Group=="MeioticPostmeiotic")
 meiotic.meioticpostmeiotic.a <- subset(meiotic.meioticpostmeiotic, meiotic.meioticpostmeiotic$XorA=="A")
 meiotic.meioticpostmeiotic.x <- subset(meiotic.meioticpostmeiotic, meiotic.meioticpostmeiotic$XorA=="X")
 
+# subset for Meiotic + MeioticPostMeiotic + PostMeiotic genes (and the sub-subsets for autosomal and X-linked genes)
 meiotic.meioticpostmeiotic.postmeiotic <- subset(al, al$Group=="Meiotic" | al$Group=="MeioticPostmeiotic" | al$Group=="PostMeiotic")
 meiotic.meioticpostmeiotic.postmeiotic.a <- subset(meiotic.meioticpostmeiotic.postmeiotic, meiotic.meioticpostmeiotic.postmeiotic$XorA=="A")
 meiotic.meioticpostmeiotic.postmeiotic.x <- subset(meiotic.meioticpostmeiotic.postmeiotic, meiotic.meioticpostmeiotic.postmeiotic$XorA=="X")
 
+# subset for MeioticPostMeiotic + PostMeiotic genes (and the sub-subsets for autosomal and X-linked genes)
 meioticpostmeiotic.postmeiotic <- subset(al, al$Group=="MeioticPostmeiotic" | al$Group=="PostMeiotic")
 meioticpostmeiotic.postmeiotic.a <- subset(meioticpostmeiotic.postmeiotic, meioticpostmeiotic.postmeiotic$XorA=="A")
 meioticpostmeiotic.postmeiotic.x <- subset(meioticpostmeiotic.postmeiotic, meioticpostmeiotic.postmeiotic$XorA=="X")
 
+# subset for MeioticPostMeiotic genes (and the sub-subsets for autosomal and X-linked genes)
 meioticpostmeiotic <- subset(al, al$Group=="MeioticPostmeiotic")
 meioticpostmeiotic.a <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="A")
 meioticpostmeiotic.x <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="X")
 
-
+# subset of equal genes to act as control for the PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.1 <- subset(equal, equal$PostMeiosis >=7.253) #pos
 control.1.a <- subset(control.1, control.1$XorA=="A")
 control.1.x <- subset(control.1, control.1$XorA=="X")
 
+# subset of equal genes to act as control for the Meiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.2 <- subset(equal, equal$Meiosis >= 7.423) #mei
 control.2.a <- subset(control.2, control.2$XorA=="A")
 control.2.x <- subset(control.2, control.2$XorA=="X")
 
+# subset of equal genes to act as control for the MeioticPostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.3 <- subset(equal, equal$PostMeiosis >= 9.102) #meipos$Pos
 control.3.a <- subset(control.3, control.3$XorA=="A")
 control.3.x <- subset(control.3, control.3$XorA=="X")
 
+# subset of equal genes to act as control for the MeioticPostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.4 <- subset(equal, equal$Meiosis >= 8.346) #meipos$Mei
 control.4.a <- subset(control.4, control.4$XorA=="A")
 control.4.x <- subset(control.4, control.4$XorA=="X")
 
+# subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.5 <- subset(equal, equal$Meiosis>=7.708) #mei.meipos
 control.5.a <- subset(control.5, control.5$XorA=="A")
 control.5.x <- subset(control.5, control.5$XorA=="X")
 
+# subset of equal genes to act as control for the MeioticPostMeiotic + PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.6 <- subset(equal, equal$PostMeiosis>=7.402) #meipos.pos
 control.6.a <- subset(control.6, control.6$XorA=="A")
 control.6.x <- subset(control.6, control.6$XorA=="X")
 
+# subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic + PostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.7 <- subset(equal, equal$Meiosis>=6.603) #mei.meipos.pos$Mei
 control.7.a <- subset(control.7, control.7$XorA=="A")
 control.7.x <- subset(control.7, control.7$XorA=="X")
 
+# subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic + PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.8 <- subset(equal, equal$PostMeiosis>=7.208) #mei.meipos.pos$Pos
 control.8.a <- subset(control.8, control.8$XorA=="A")
 control.8.x <- subset(control.8, control.8$XorA=="X")
 
+# subset of equal genes to act as control for the Mitotic group, as their expression during Mitosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
 control.mit <- subset(equal, equal$Mitosis>=7.262)
 control.mit.a <- subset(control.mit, control.mit$XorA=="A")
 control.mit.x <- subset(control.mit, control.mit$XorA=="X")
 
 
+# gets the proportion ox X-linked genes, new X-linked genes, autosomal genes and new autosomal genes in the whole set minus the equal expression category
 xall <- length(subset(total$XorA, total$XorA=="X" & total$Group !="Equal"))/length(subset(total$XorA, total$Group !="Equal"))
 
 newxall <- length(subset(total$XorA, total$XorA=="X" & total$age=="new" & total$Group!="Equal"))/length(subset(total$XorA, total$age=="new" & total$Group!="Equal"))
@@ -92,6 +107,8 @@ aall <- length(subset(total$XorA, total$XorA=="A" & total$Group!="Equal"))/lengt
 
 newaall <- length(subset(total$XorA, total$XorA=="A" & total$age=="new" & total$Group!="Equal"))/length(subset(total$XorA, total$age=="new" & total$Group!="Equal"))
 
+
+# creates a data.frame with the number of genes with a given age (new or old), chromosomal location (x-linked or autosomal), and expression category (mitotic, meiotic or post-meiotic), as well as the proportion of such genes in the data.frame
 datab <- data.frame(Age = c(rep("old",6), rep("new",6)),
                     Chromosome = c(rep(c("A","X"), 6)), 
                     Group = c(rep(c('Mitotic','Meiotic','PostMeiotic'), each=2), rep(c('Mitotic','Meiotic','PostMeiotic'), each=2)),
@@ -127,6 +144,8 @@ datab$Chromosome <- factor(datab$Chromosome, levels=c("A", "X"))
 x.datab <- subset(datab, datab$Chromosome=="X")
 a.datab <- subset(datab, datab$Chromosome=="A")
 
+
+# subset of the total data.frame to create a matrix with ageXexpression category, and be able to create graphs and stats
 mm <- subset(total, total$Group=='Mitotic' | total$Group=='Meiotic' | total$Group=='PostMeiotic')
 mmp <- subset(mm, mm$XorA=='A')
 
@@ -146,6 +165,7 @@ matp <- prop.table(matx, 1)*100
 #################### Figure 1 BW ###################
 pdf("figure1_bw.pdf")#, res=300)
 par(mar=c(6,5,4,2)+0.1)
+# graph with the proportion of genes in each class, and subsequent stats represented by *
 barplot(matp, beside=T, col=c("dimgray","gray"), xlab="Spermatogenesis phase", ylab="Percentage of genes", cex.lab=1.5, cex.axis=1.5, cex.main=1.5, ylim=c(10,60), xpd=F, xaxt="n")
 axis(1, at=c(seq(2,8, by=3)), labels=c("Mitotic", "Meiotic", "Post-Meiotic"), cex.axis=1.5, lwd=0)
 text(x=c(3.6,6.6,5), y=c(30,32,52), labels=c("***", "***", "***"), cex=3)
@@ -180,6 +200,7 @@ dev.off()
 ###################### Figure 2 BW #################################
 pdf("figure2_bw.pdf")#, res=100)#, width=10, height=10)
 par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
+# boxplot with dn/ds and alpha values
 ## dN/dS ##
 boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
     subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="old"), subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="new"),
@@ -229,6 +250,7 @@ facet_labeller <- function(variable, value){
     return(facet_names[value])
 }
 
+# graph with proportion of X-linked and autossomal genes in each expression category for new and old genes.
 pdf("figure3_bw.pdf", width=15, height=10)#, res=300) # width=22, height=10, 
 ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     geom_bar(position='stack', stat='identity') +
@@ -237,13 +259,16 @@ ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     theme(text = element_text(size=30)) +
     scale_x_discrete(name="") +
     geom_hline(aes(yintercept =z), hline.data) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.99,6)), label=c(x.datab$Count), size=7) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.61, 6)), label=c(a.datab$Count), size=7) +
+    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.99,6)), label=c(x.datab$Count), size=7) + #here it has a problem, as it should print 6 diferent thigs, but it repeats the first 3 thing 2 times... I don't know how to solve it... =(
+    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.61, 6)), label=c(a.datab$Count), size=7) + #here it has a problem, as it should print 6 diferent thigs, but it repeats the first 3 thing 2 times... I don't know how to solve it... =(
     geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
     #geom_text(x=c(2,1), y=c(0.875, 0.74), label=c("***", "*"), Age=c("old", "new")) + #comparações contra todos os genes que não são equal
     #geom_text(x=c(2, 4, 6)a, y=c(0.886, 0.747, 0.914), label=c("***", "*", "***")) + #comparações contra todos os genes que não são equal
     scale_fill_manual(values=c("Grey 70", "Gray 50"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
 dev.off()
+
+
+### Same graphs as before, now in collors.
 
 ######################## Figure 1 Color ################################
 pdf("figure1_color.pdf")#, res=300)

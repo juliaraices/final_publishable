@@ -1,6 +1,9 @@
 # July 2016
 # Julia Raices
 
+# creating new controsl as the old ones may not be so good
+
+# reading the file and creating interest groups (as in final.R)
 droso <- read.table("final.output", header=T)
 
 equal <- subset(droso, droso$Group=="Equal")
@@ -24,6 +27,8 @@ summary(meiotic$Meiosis)
 
 y <- rbind(z, w)
 
+# trying to make a bootstrap in wich the subset of equal new genes has the same expression as the meiotic new genes (in this case) and check if the alpha is the same or not.
+
 for(i in 1:100){
     repeat{
         eq <- eq.new
@@ -39,6 +44,6 @@ for(i in 1:100){
     bootz[b] <- will$p.value
 }
 
-
+# this takes a hell of long time to run... may be I did sth wrong...
 
 

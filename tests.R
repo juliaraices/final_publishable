@@ -1,3 +1,5 @@
+# All statistical tests made to see if expression among groups is different or not.
+## Groups used are those made in final.R
 wilcox.test(postmeiotic$PostMeiosis, control.1$PostMeiosis) # 0.1164
 wilcox.test(postmeiotic.a$PostMeiosis, control.1.a$PostMeiosis) # 0.07363
 wilcox.test(postmeiotic.x$PostMeiosis, control.1.x$PostMeiosis) # 0.952

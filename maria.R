@@ -1,3 +1,4 @@
+# Summary of expression and length of the mais expression categories to send to my advisor.
 tot <- read.table("final.output", header = T, sep = "\t")
 tots <- subset(tot, tot$dn != "NA")
 tot.a <- subset(tot, tot$XorA=="A")
