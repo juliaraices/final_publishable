@@ -1,6 +1,10 @@
 # June 2016
 # Júlia Raíces
 
+# creating new controsl as the old ones may not be so good
+
+# reading the file and creating interest groups (as in final.R)
+
 droso <- read.table("final.output", header=T)
 
 equal <- subset(droso, droso$Group=="Equal")
@@ -13,6 +17,7 @@ haploid <- subset(droso, droso$Group=="Meiotic" | droso$Group=="PostMeiotic" | d
 
 bootz <- rep("NA", 100)
 
+# trying to make a bootstrap in wich the subset of equal genes has the same expression as the meiotic genes (in this case) and check if the alpha is the same or not.
 # 1st try
 a = 0
 b = 0
