@@ -30,12 +30,13 @@ for(i in 1:100){
         eq <- equal.d
         temp <- eq[sample(nrow(eq), 500, replace = TRUE), ]
         blabs <- wilcox.test(temp$Meiosis, meiotic.d$Meiosis, na.action=rm)
-        a <- a+1
-        print(a)
+        #a <- a+1
+        #print(a)
         if(blabs$p.value >= 0.05) break
     }
-    a=0
+    #a=0
     b <- b+1
+    print(b)
     will <- wilcox.test(temp$alpha, meiotic.d$alpha, na.action=rm)
     bootz[b] <- will$p.value
 }
