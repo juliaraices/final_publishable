@@ -98,7 +98,7 @@ control.mit.a <- subset(control.mit, control.mit$XorA=="A")
 control.mit.x <- subset(control.mit, control.mit$XorA=="X")
 
 
-# gets the proportion ox X-linked genes, new X-linked genes, autosomal genes and new autosomal genes in the whole set minus the equal expression category
+# gets the proportion of X-linked genes, new X-linked genes, autosomal genes and new autosomal genes in the whole set minus the equal expression category
 xall <- length(subset(total$XorA, total$XorA=="X" & total$Group !="Equal"))/length(subset(total$XorA, total$Group !="Equal"))
 
 newxall <- length(subset(total$XorA, total$XorA=="X" & total$age=="new" & total$Group!="Equal"))/length(subset(total$XorA, total$age=="new" & total$Group!="Equal"))
@@ -109,54 +109,77 @@ newaall <- length(subset(total$XorA, total$XorA=="A" & total$age=="new" & total$
 
 
 # creates a data.frame with the number of genes with a given age (new or old), chromosomal location (x-linked or autosomal), and expression category (mitotic, meiotic or post-meiotic), as well as the proportion of such genes in the data.frame
-datab <- data.frame(Age = c(rep("old",6), rep("new",6)),
-                    Chromosome = c(rep(c("A","X"), 6)), 
-                    Group = c(rep(c('Mitotic','Meiotic','PostMeiotic'), each=2), rep(c('Mitotic','Meiotic','PostMeiotic'), each=2)),
-                    Count = c(length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='X')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='X')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))),
-                    Proportion=c(length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),
-                        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')),
-                        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new')),
-                        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new'))))
+# datab <- data.frame(Age = c(rep("old",6), rep("new",6)),
+#                     Chromosome = c(rep(c("A","X"), 6)), 
+#                     Group = c(rep(c('Mitotic','Meiotic','PostMeiotic'), each=2), rep(c('Mitotic','Meiotic','PostMeiotic'), each=2)),
+#                     Count = c(length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='X')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='X')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))),
+#                     Proportion=c(length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),
+#                         length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')),
+#                         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new')),
+#                         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new'))))
+# 
+# datab$Group <- factor(datab$Group, levels=c("Mitotic", "Meiotic", "PostMeiotic"))
+# datab$Age <- factor(datab$Age, levels=c("old", "new"))
+# datab$Chromosome <- factor(datab$Chromosome, levels=c("A", "X"))
+# 
+# x.datab <- subset(datab, datab$Chromosome=="X")
+# a.datab <- subset(datab, datab$Chromosome=="A")
 
-datab$Group <- factor(datab$Group, levels=c("Mitotic", "Meiotic", "PostMeiotic"))
-datab$Age <- factor(datab$Age, levels=c("old", "new"))
-datab$Chromosome <- factor(datab$Chromosome, levels=c("A", "X"))
+# way better way to the what was above:
+library(plyr)
+dats <- aggregate(total$id, by = list(total$age, total$XorA, total$Group), FUN=length)
+dats <- subset(dats, dats$Group.3=="Mitotic" | dats$Group.3=="Meiotic" | dats$Group.3=="PostMeiotic")
+rename(dats, c("Group.1"="Age", "Group.2"="Chromosome", "Group.3"="Group", "x"="Count"))
+dats$Proportion <- c(length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')), #old A mei
+        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')), #new A mei
+        length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')), #old X mei
+        length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')), #new X mei
+        length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')), #old A mit
+        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),#new A mit
+        length(subset(total$id, total$Group=='Mitotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='old')), #old X mit
+        length(subset(total$id, total$Group=='Mitotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Mitotic' & total$age=='new')),#new X mit
+        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')), #old A pos
+        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new')), #new A pos
+        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')), #old X pos
+        length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new'))) #new X pos
 
-x.datab <- subset(datab, datab$Chromosome=="X")
-a.datab <- subset(datab, datab$Chromosome=="A")
-
+############### How to do the proportions better?
 
 # subset of the total data.frame to create a matrix with ageXexpression category, and be able to create graphs and stats
-mm <- subset(total, total$Group=='Mitotic' | total$Group=='Meiotic' | total$Group=='PostMeiotic')
-mmp <- subset(mm, mm$XorA=='A')
+mmp <- subset(total.a, total.a$Group=='Mitotic' | total.a$Group=='Meiotic' | total.a$Group=='PostMeiotic')
 
-matx <- matrix(data=c(length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='old')),
-                      length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='new')),
-                      length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='old')),
-                      length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='new')),
-                      length(subset(mmp$id, mmp$Group=='PostMeiotic' & mmp$age=='old')),
-                      length(subset(mmp$id, mmp$Group=='PostMeiotic' & mmp$age=='new'))), nrow=2)
-rownames(matx)<-c("old", "new")
-colnames(matx)<-c("Mitotic", "Meiotic", "PostMeiotic")
+mmp$Group = factor(mmp$Group) ### "joga fora" os factors vazios
+matx = table(mmp$age, mmp$Group)
+matx <- matx[,c("Mitotic", "Meiotic", "PostMeiotic")]
+
+
+# matx <- matrix(data=c(length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='old')),
+#                       length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='new')),
+#                       length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='old')),
+#                       length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='new')),
+#                       length(subset(mmp$id, mmp$Group=='PostMeiotic' & mmp$age=='old')),
+#                       length(subset(mmp$id, mmp$Group=='PostMeiotic' & mmp$age=='new'))), nrow=2)
+# rownames(matx)<-c("old", "new")
+# colnames(matx)<-c("Mitotic", "Meiotic", "PostMeiotic")
 matp <- prop.table(matx, 1)*100
 
 
