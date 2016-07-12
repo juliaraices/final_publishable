@@ -53,50 +53,76 @@ meioticpostmeiotic.a <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="A")
 meioticpostmeiotic.x <- subset(meioticpostmeiotic, meioticpostmeiotic$XorA=="X")
 
 # subset of equal genes to act as control for the PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.1 <- subset(equal, equal$PostMeiosis >=7.253) #pos
+control.1 <- subset(equal, equal$PostMeiosis >=(median(postmeiotic$PostMeiosis)-2)) #pos
+if(wilcox.test(postmeiotic$PostMeiosis, control.1$PostMeiosis)$p.value <= 0.05) print("FUCK 1")
 control.1.a <- subset(control.1, control.1$XorA=="A")
+if(wilcox.test(postmeiotic.a$PostMeiosis, control.1.a$PostMeiosis)$p.value <= 0.05) print("FUCK 1")
 control.1.x <- subset(control.1, control.1$XorA=="X")
+if(wilcox.test(postmeiotic.x$PostMeiosis, control.1.x$PostMeiosis)$p.value <= 0.05) print("FUCK 1")
 
 # subset of equal genes to act as control for the Meiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.2 <- subset(equal, equal$Meiosis >= 7.423) #mei
+control.2 <- subset(equal, equal$Meiosis >= (median(meiotic$Meiosis)-2.2)) #mei
+if(wilcox.test(meiotic$Meiosis, control.2$Meiosis)$p.value <= 0.05) print("FUCK 2")
 control.2.a <- subset(control.2, control.2$XorA=="A")
+if(wilcox.test(meiotic.a$Meiosis, control.2.a$Meiosis)$p.value <= 0.05) print("FUCK 2")
 control.2.x <- subset(control.2, control.2$XorA=="X")
+if(wilcox.test(meiotic.x$Meiosis, control.2.x$Meiosis)$p.value <= 0.05) print("FUCK 2")
 
 # subset of equal genes to act as control for the MeioticPostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.3 <- subset(equal, equal$PostMeiosis >= 9.102) #meipos$Pos
+control.3 <- subset(equal, equal$PostMeiosis >= (median(meioticpostmeiotic$PostMeiosis)-2)) #meipos$Pos
+if(wilcox.test(meioticpostmeiotic$PostMeiosis, control.3$PostMeiosis)$p.value <= 0.05) print("FUCK 3")
 control.3.a <- subset(control.3, control.3$XorA=="A")
+if(wilcox.test(meioticpostmeiotic.a$PostMeiosis, control.3.a$PostMeiosis)$p.value <= 0.05) print("FUCK 3")
 control.3.x <- subset(control.3, control.3$XorA=="X")
+if(wilcox.test(meioticpostmeiotic.x$PostMeiosis, control.3.x$PostMeiosis)$p.value <= 0.05) print("FUCK 3")
 
 # subset of equal genes to act as control for the MeioticPostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.4 <- subset(equal, equal$Meiosis >= 8.346) #meipos$Mei
+control.4 <- subset(equal, equal$Meiosis >= (median(meioticpostmeiotic$Meiosis)-3)) #meipos$Mei
+if(wilcox.test(meioticpostmeiotic$Meiosis, control.4$Meiosis)$p.value <= 0.05) print("FUCK 4")
 control.4.a <- subset(control.4, control.4$XorA=="A")
+if(wilcox.test(meioticpostmeiotic.a$Meiosis, control.4.a$Meiosis)$p.value <= 0.05) print("FUCK 4")
 control.4.x <- subset(control.4, control.4$XorA=="X")
+if(wilcox.test(meioticpostmeiotic.x$Meiosis, control.4.x$Meiosis)$p.value <= 0.05) print("FUCK 4")
 
 # subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.5 <- subset(equal, equal$Meiosis>=7.708) #mei.meipos
+control.5 <- subset(equal, equal$Meiosis>=(median(meiotic.meioticpostmeiotic$Meiosis)-2.7)) #mei.meipos
+if(wilcox.test(meiotic.meioticpostmeiotic$Meiosis, control.5$Meiosis)$p.value <= 0.05) print("FUCK 5")
 control.5.a <- subset(control.5, control.5$XorA=="A")
+if(wilcox.test(meiotic.meioticpostmeiotic.a$Meiosis, control.5.a$Meiosis)$p.value <= 0.05) print("FUCK 5")
 control.5.x <- subset(control.5, control.5$XorA=="X")
+if(wilcox.test(meiotic.meioticpostmeiotic.x$Meiosis, control.5.x$Meiosis)$p.value <= 0.05) print("FUCK 5")
 
 # subset of equal genes to act as control for the MeioticPostMeiotic + PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.6 <- subset(equal, equal$PostMeiosis>=7.402) #meipos.pos
+control.6 <- subset(equal, equal$PostMeiosis>=(median(meioticpostmeiotic.postmeiotic$PostMeiosis)-2.5)) #meipos.pos
+if(wilcox.test(meioticpostmeiotic.postmeiotic$PostMeiosis, control.6$PostMeiosis)$p.value <= 0.05) print("FUCK 6")
 control.6.a <- subset(control.6, control.6$XorA=="A")
+if(wilcox.test(meioticpostmeiotic.postmeiotic.a$PostMeiosis, control.6.a$PostMeiosis)$p.value <= 0.05) print("FUCK 6")
 control.6.x <- subset(control.6, control.6$XorA=="X")
+if(wilcox.test(meioticpostmeiotic.postmeiotic.x$PostMeiosis, control.6.x$PostMeiosis)$p.value <= 0.05) print("FUCK 6")
 
 # subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic + PostMeiotic group, as their expression during Meiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.7 <- subset(equal, equal$Meiosis>=6.603) #mei.meipos.pos$Mei
+control.7 <- subset(equal, equal$Meiosis>=(median(meiotic.meioticpostmeiotic.postmeiotic$Meiosis)-2.4)) #mei.meipos.pos$Mei
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic$Meiosis, control.7$Meiosis)$p.value <= 0.05) print("FUCK 7")
 control.7.a <- subset(control.7, control.7$XorA=="A")
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$Meiosis, control.7.a$Meiosis)$p.value <= 0.05) print("FUCK 7")
 control.7.x <- subset(control.7, control.7$XorA=="X")
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.x$Meiosis, control.7.x$Meiosis)$p.value <= 0.05) print("FUCK 7")
 
 # subset of equal genes to act as control for the Meiotic + MeioticPostMeiotic + PostMeiotic group, as their expression during PostMeiosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.8 <- subset(equal, equal$PostMeiosis>=7.208) #mei.meipos.pos$Pos
+control.8 <- subset(equal, equal$PostMeiosis>=(median(meiotic.meioticpostmeiotic.postmeiotic$PostMeiosis)-2)) #mei.meipos.pos$Pos
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic$PostMeiosis, control.8$PostMeiosis)$p.value <= 0.05) print("FUCK 8")
 control.8.a <- subset(control.8, control.8$XorA=="A")
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$PostMeiosis, control.8.a$PostMeiosis)$p.value <= 0.05) print("FUCK 8")
 control.8.x <- subset(control.8, control.8$XorA=="X")
+if(wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.x$PostMeiosis, control.8.x$PostMeiosis)$p.value <= 0.05) print("FUCK 8")
 
 # subset of equal genes to act as control for the Mitotic group, as their expression during Mitosis shall be the same (and the sub-subsets for autosomal and X-linked genes)
-control.mit <- subset(equal, equal$Mitosis>=7.262)
+control.mit <- subset(equal, equal$Mitosis>=(median(mitotic$Mitosis)-2.3))
+if(wilcox.test(mitotic$Mitosis, control.mit$Mitosis)$p.value <= 0.05) print("FUCK MIT")
 control.mit.a <- subset(control.mit, control.mit$XorA=="A")
+if(wilcox.test(mitotic.a$Mitosis, control.mit.a$Mitosis)$p.value <= 0.05) print("FUCK MIT")
 control.mit.x <- subset(control.mit, control.mit$XorA=="X")
-
+if(wilcox.test(mitotic.x$Mitosis, control.mit.x$Mitosis)$p.value <= 0.05) print("FUCK MIT")
 
 # gets the proportion of X-linked genes, new X-linked genes, autosomal genes and new autosomal genes in the whole set minus the equal expression category
 xall <- length(subset(total$XorA, total$XorA=="X" & total$Group !="Equal"))/length(subset(total$XorA, total$Group !="Equal"))
@@ -141,15 +167,13 @@ newaall <- length(subset(total$XorA, total$XorA=="A" & total$age=="new" & total$
 # datab$Age <- factor(datab$Age, levels=c("old", "new"))
 # datab$Chromosome <- factor(datab$Chromosome, levels=c("A", "X"))
 # 
-# x.datab <- subset(datab, datab$Chromosome=="X")
-# a.datab <- subset(datab, datab$Chromosome=="A")
+# 
 
 # way better way to the what was above:
 library(plyr)
-dats <- aggregate(total$id, by = list(total$age, total$XorA, total$Group), FUN=length)
-dats <- subset(dats, dats$Group.3=="Mitotic" | dats$Group.3=="Meiotic" | dats$Group.3=="PostMeiotic")
-rename(dats, c("Group.1"="Age", "Group.2"="Chromosome", "Group.3"="Group", "x"="Count"))
-dats$Proportion <- c(length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')), #old A mei
+datab <- aggregate(total$id, by = list(total$age, total$XorA, total$Group), FUN=length)
+datab <- subset(datab, datab$Group.3=="Mitotic" | datab$Group.3=="Meiotic" | datab$Group.3=="PostMeiotic")
+datab$Proportion <- c(length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')), #old A mei
         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')), #new A mei
         length(subset(total$id, total$Group=='Meiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='old')), #old X mei
         length(subset(total$id, total$Group=='Meiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='Meiotic' & total$age=='new')), #new X mei
@@ -161,6 +185,13 @@ dats$Proportion <- c(length(subset(total$id, total$Group=='Meiotic' & total$age=
         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='A'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new')), #new A pos
         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='old')), #old X pos
         length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new' & total$XorA=='X'))/length(subset(total$id, total$Group=='PostMeiotic' & total$age=='new'))) #new X pos
+
+datab <- rename(datab, c("Group.1"="Age", "Group.2"="Chromosome", "Group.3"="Group", "x"="Count"))
+
+datab$Group <- factor(datab$Group, levels=c("Mitotic", "Meiotic", "PostMeiotic"))
+
+x.datab <- subset(datab, datab$Chromosome=="X")
+a.datab <- subset(datab, datab$Chromosome=="A")
 
 ############### How to do the proportions better?
 
@@ -264,6 +295,7 @@ library(ggplot2)
 
 hline.data <- data.frame(z = c(aall, newaall), Age = c("old","new"))
 labs.data <- data.frame(s=c(2, 1, 3), f=c(0.878, 0.74, 0.905), z = c("***", "*", "***"), Age = c("old","new", "new"), Chromosome=c("A", "A", "A"))
+texto <- data.frame(x=c(rep(c(1,2,3),4)), y=c(rep(0.99, 6), rep(0.61, 6)), lab=c(x.count, a.count), Age=c(rep(c(rep("old",3), rep("new", 3)),2)))
 
 facet_names <- list(
     'old'="Old Genes",
@@ -272,6 +304,11 @@ facet_names <- list(
 facet_labeller <- function(variable, value){
     return(facet_names[value])
 }
+
+
+x.count <- c(subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group!="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group!="Mitotic"))
+
+a.count <- c(subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group!="Mitotic"), subset(a.datab$Count, x.datab$Age=="new" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="new" & a.datab$Group!="Mitotic"))
 
 # graph with proportion of X-linked and autossomal genes in each expression category for new and old genes.
 pdf("figure3_bw.pdf", width=15, height=10)#, res=300) # width=22, height=10, 
@@ -282,11 +319,8 @@ ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     theme(text = element_text(size=30)) +
     scale_x_discrete(name="") +
     geom_hline(aes(yintercept =z), hline.data) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.99,6)), label=c(x.datab$Count), size=7) + #here it has a problem, as it should print 6 diferent thigs, but it repeats the first 3 thing 2 times... I don't know how to solve it... =(
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.61, 6)), label=c(a.datab$Count), size=7) + #here it has a problem, as it should print 6 diferent thigs, but it repeats the first 3 thing 2 times... I don't know how to solve it... =(
+    geom_text(aes(x=x,y=y,label=lab), texto, size=7, inherit.aes=F) +
     geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
-    #geom_text(x=c(2,1), y=c(0.875, 0.74), label=c("***", "*"), Age=c("old", "new")) + #comparações contra todos os genes que não são equal
-    #geom_text(x=c(2, 4, 6)a, y=c(0.886, 0.747, 0.914), label=c("***", "*", "***")) + #comparações contra todos os genes que não são equal
     scale_fill_manual(values=c("Grey 70", "Gray 50"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
 dev.off()
 
@@ -355,11 +389,8 @@ ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     theme(text = element_text(size=30)) +
     scale_x_discrete(name="") +
     geom_hline(aes(yintercept =z), hline.data) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.99,6)), label=c(x.datab$Count), size=7) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.61, 6)), label=c(a.datab$Count), size=7) +
     geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
-    #geom_text(x=c(2,1), y=c(0.875, 0.74), label=c("***", "*"), Age=c("old", "new")) + #comparações contra todos os genes que não são equal
-    #geom_text(x=c(2, 4, 6)a, y=c(0.886, 0.747, 0.914), label=c("***", "*", "***")) + #comparações contra todos os genes que não são equal
+    geom_text(aes(x=x,y=y,label=lab), texto, size=7, inherit.aes=F) +
     scale_fill_manual(values=c("Khaki", "Thistle"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
 dev.off()
 
@@ -546,9 +577,9 @@ axis(1, at=c(seq(1.5,17.5, by=2)), labels=c("I", "II", "III", "IV", "V", "VI", "
 text(x=c(seq(1.5,17.5, by=2)), y=c(rep(0.9, 9)), labels=c("","","", "", "", "", "", "", ""), cex=3)
 dev.off()
 
-
+dev.off()
 ################# Expression #######################
-boxplot(total.a$Mitosis, )
+boxplot(total.a$Mitosis)
 ggplot(total.a, aes(x=age, y=Mitosis, fill=age)) +
     geom_boxplot()
 ggplot(total.a, aes(x=age, y=Meiosis, fill=age)) +
