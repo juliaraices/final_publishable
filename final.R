@@ -4,7 +4,7 @@
 # - make graphs 1, 2, 3, 4, suplementals et al
 
 # reads the output
-total <- read.table("final.output", header=T)
+total <- read.table("output/final.output", header=T)
 total$age <- factor(total$age, levels=c("old","new"))
 total$dnds <- as.numeric(total$dnds)
 # creates a subgroup of autosomal genes
@@ -230,7 +230,8 @@ legend(x=7, y=60, inset=c(-5,-0.5),legend=c("new genes", "old genes"), fill=c("g
 dev.off() 
 
 # change the sets so that you can test 2 by 2 the groups per age
-#test <- matrix(data=c(length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='old')),
+#test <- matrix(data=c(
+#            length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='old')),
 #            length(subset(mmp$id, mmp$Group=='Mitotic' & mmp$age=='new')),
 #            length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='old')),
 #            length(subset(mmp$id, mmp$Group=='Meiotic' & mmp$age=='new')),
@@ -260,17 +261,22 @@ boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mit
     subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="old"), subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="new"),
     col=c("dimgrey", "grey"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-legend(x=1, y=-1, inset=0.01, legend=c("new", "old"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
 text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=3)
 mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+#wilcox.test(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"))
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="old"), subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="new"))
+
 
 boxplot(mitotic.a$dnds, control.mit.a$dnds,
         meiotic.meioticpostmeiotic.postmeiotic.a$dnds, control.8.a$dnds,
         col=c("Grey 20", "Grey 42"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-legend(x=0, y=-1, inset=-0.01, legend=c("Experimental", "Control"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
 text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=3)
 mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+#wilcox.test(mitotic.a$dnds, control.mit.a$dnds)
+#wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, control.8.a$dnds)
 
 ## alpha ##
 boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
@@ -278,23 +284,34 @@ boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, m
         col=c("dimgrey", "grey"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
 #text(x=1.5, y=-1.7, labels="p = 0.3606", cex=1.2)
-text(x=3.5, y=-1.7, labels="***", cex=3)
+text(x=c(3.5), y=c(-1.7), labels=c("***"), cex=3)
+text(x=c(1.5), y=c(-2), labels=c("p = 0.289"), cex=1)
 mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+#wilcox.test(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"))
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, meiotic.meioticpostmeiotic.postmeiotic.a$age=="old"), subset(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, meiotic.meioticpostmeiotic.postmeiotic.a$age=="new"))
 
 boxplot(mitotic.a$alpha, control.mit.a$alpha,
         meiotic.meioticpostmeiotic.postmeiotic.a$alpha, control.8.a$alpha,
         col=c("Grey 20", "Grey 42"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-#text(x=1.5, y=-2, labels="p = 0.4675", cex=1.2)
-text(x=3.5, y=-1.7, labels="", cex=2.5)
+text(x=3.5, y=-1.7, labels="*", cex=2.5)
+text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
 mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+#wilcox.test(mitotic.a$alpha, control.mit.a$alpha)
+#wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, control.8.a$alpha)
 dev.off()
 
 ######################## Figure 3 BW ####################################
 library(ggplot2)
 
+
+x.count <- c(subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group!="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group!="Mitotic"))
+
+a.count <- c(subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group!="Mitotic"), subset(a.datab$Count, x.datab$Age=="new" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="new" & a.datab$Group!="Mitotic"))
+
 hline.data <- data.frame(z = c(aall, newaall), Age = c("old","new"))
 labs.data <- data.frame(s=c(2, 1, 3), f=c(0.878, 0.74, 0.905), z = c("***", "*", "***"), Age = c("old","new", "new"), Chromosome=c("A", "A", "A"))
+ps <- data.frame(a=c(1,3,1,2), b=c(0.834, 0.834, 0.74, 0.815), d=c("0.096", "0.493", "", "0.777"), Age=c("old", "old", "new", "new"), Chromosome=c("A", "A", "A", "A"))
 texto <- data.frame(x=c(rep(c(1,2,3),4)), y=c(rep(0.99, 6), rep(0.61, 6)), lab=c(x.count, a.count), Age=c(rep(c(rep("old",3), rep("new", 3)),2)))
 
 facet_names <- list(
@@ -306,9 +323,6 @@ facet_labeller <- function(variable, value){
 }
 
 
-x.count <- c(subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="old" & x.datab$Group!="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group=="Mitotic"), subset(x.datab$Count, x.datab$Age=="new" & x.datab$Group!="Mitotic"))
-
-a.count <- c(subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="old" & a.datab$Group!="Mitotic"), subset(a.datab$Count, x.datab$Age=="new" & a.datab$Group=="Mitotic"), subset(a.datab$Count, a.datab$Age=="new" & a.datab$Group!="Mitotic"))
 
 # graph with proportion of X-linked and autossomal genes in each expression category for new and old genes.
 pdf("figure3_bw.pdf", width=15, height=10)#, res=300) # width=22, height=10, 
@@ -321,9 +335,45 @@ ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     geom_hline(aes(yintercept =z), hline.data) +
     geom_text(aes(x=x,y=y,label=lab), texto, size=7, inherit.aes=F) +
     geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
+    geom_text(aes(x=a, y=b, label=d), ps, size=5) +
     scale_fill_manual(values=c("Grey 70", "Gray 50"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
 dev.off()
 
+#x.test <- matrix(data=c(
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='Mitotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='Mitotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='Mitotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='Mitotic' & datab$Chromosome=='X'))
+    
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='Meiotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='Meiotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='Meiotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='Meiotic' & datab$Chromosome=='X'))
+
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='PostMeiotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='old' & datab$Group=='PostMeiotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='PostMeiotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='old'))-subset(datab$Count, datab$Age=='old' & datab$Group=='PostMeiotic' & datab$Chromosome=='X'))
+    
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='Mitotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='Mitotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='Mitotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='Mitotic' & datab$Chromosome=='X'))
+    
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='Meiotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='Meiotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='Meiotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='Meiotic' & datab$Chromosome=='X'))
+
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='PostMeiotic' & datab$Chromosome=='A'),
+    #subset(datab$Count, datab$Age=='new' & datab$Group=='PostMeiotic' & datab$Chromosome=='X'),
+    #(sum(subset(datab$Count, datab$Chromosome=='A' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='PostMeiotic' & datab$Chromosome=='A')),
+    #(sum(subset(datab$Count, datab$Chromosome=='X' & datab$Age=='new'))-subset(datab$Count, datab$Age=='new' & datab$Group=='PostMeiotic' & datab$Chromosome=='X'))
+#), nrow=2)
+
+
+chisq.test(x.test)
+fisher.test(x.test)
 
 ### Same graphs as before, now in collors.
 
@@ -348,7 +398,7 @@ boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mit
         subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="old"), subset(meiotic.meioticpostmeiotic.postmeiotic.a$dnds, meiotic.meioticpostmeiotic.postmeiotic.a$age=="new"), 
         col=c("powderblue", "salmon"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-legend(x=1, y=-1, inset=0.01, legend=c("new", "old"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
 text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
 mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
 
@@ -356,7 +406,7 @@ boxplot(mitotic.a$dnds, control.mit.a$dnds,
         meiotic.meioticpostmeiotic.postmeiotic.a$dnds, control.8.a$dnds,
         col=c("pink", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-legend(x=0, y=-1, inset=-0.01, legend=c("Experimental", "Control"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
 text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=2.5)
 mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
 ## alpha ##
@@ -372,12 +422,15 @@ boxplot(mitotic.a$alpha, control.mit.a$alpha,
         col=c("pink", "plum"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
 axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
 text(x=3.5, y=-1.7, labels="*", cex=2.5)
+text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
 mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+#wilcox.test(mitotic.a$alpha, control.mit.a$alpha)
+#wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, control.8.a$alpha)
 dev.off()
 
-wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"), subset(control.7$alpha, control.7$age=="new"))
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"), subset(control.7$alpha, control.7$age=="new"))
 
-summary(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"))
+#summary(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=="new"))
 summary(subset(control.7$alpha, control.7$age=="new"))
 
 ####################### Figure 3 Color #########################
@@ -391,6 +444,7 @@ ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
     geom_hline(aes(yintercept =z), hline.data) +
     geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
     geom_text(aes(x=x,y=y,label=lab), texto, size=7, inherit.aes=F) +
+    geom_text(aes(x=a, y=b, label=d), ps, size=5) +
     scale_fill_manual(values=c("Khaki", "Thistle"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
 dev.off()
 
@@ -578,27 +632,39 @@ text(x=c(seq(1.5,17.5, by=2)), y=c(rep(0.9, 9)), labels=c("","","", "", "", "", 
 dev.off()
 
 dev.off()
-################# Expression #######################
-boxplot(total.a$Mitosis)
-ggplot(total.a, aes(x=age, y=Mitosis, fill=age)) +
-    geom_boxplot()
-ggplot(total.a, aes(x=age, y=Meiosis, fill=age)) +
-    geom_boxplot()
-ggplot(total.a, aes(x=age, y=PostMeiosis, fill=age)) +
-    geom_boxplot()
+
+######################## Last analysis ##############################
+# wilcox new genes X vs new genes A (mit, mei, pm)
+
+wilcox.test(subset(total$Mitosis, total$XorA=='X'), subset(total$Mitosis, total$XorA=='A'))
+ks.test(subset(total$Mitosis, total$XorA=='X'), subset(total$Mitosis, total$XorA=='A'))
+
+wilcox.test(subset(total$Meiosis, total$XorA=='X'), subset(total$Meiosis, total$XorA=='A'))
+ks.test(subset(total$Meiosis, total$XorA=='X'), subset(total$Meiosis, total$XorA=='A'))
+
+wilcox.test(subset(total$PostMeiosis, total$XorA=='X'), subset(total$PostMeiosis, total$XorA=='A'))
+ks.test(subset(total$PostMeiosis, total$XorA=='X'), subset(total$PostMeiosis, total$XorA=='A'))
+
+# wilcox alpha new genes only (hap vs cont, mit vs cont)
+#wilcox.test(subset(mitotic.a$alpha, mitotic.a$age=='new'), subset(control.mit.a$alpha, control.mit.a$age=='new'))
+#ks.test(subset(mitotic.a$alpha, mitotic.a$age=='new'), subset(control.mit.a$alpha, control.mit.a$age=='new'))
+
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=='new'), subset(control.8$alpha, control.8$age=='new'))
+#ks.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=='new'), subset(control.8$alpha, control.8$age=='new'))
+#de fato o n é muito baixo pra qlq coisa....
 
 
-ggplot(datab, aes(x=Group, y=Proportion, fill=Chromosome)) +
-    facet_grid(.~Age, labeller=facet_labeller) +
-    geom_bar(position='stack', stat='identity') +
-    coord_cartesian(ylim=c(0.6, 1)) +
-    theme(text = element_text(size=30)) +
-    scale_x_discrete(name="") +
-    geom_hline(aes(yintercept =z), hline.data) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.99,6)), label=c(x.datab$Count), size=7) +
-    geom_text(x=c(1, 2, 3, 4, 5, 6), y=c(rep(0.61, 6)), label=c(a.datab$Count), size=7) +
-    geom_text(aes(x=s, y=f, label=z), labs.data, size=20) +
-    #geom_text(x=c(2,1), y=c(0.875, 0.74), label=c("***", "*"), Age=c("old", "new")) + #comparações contra todos os genes que não são equal
-    #geom_text(x=c(2, 4, 6)a, y=c(0.886, 0.747, 0.914), label=c("***", "*", "***")) + #comparações contra todos os genes que não são equal
-    scale_fill_manual(values=c("Khaki", "Thistle"), name="", breaks=c("A", "X"), labels=c("Autosomal gene", "X-linked gene"))
+# wilcox alpha (hap vs mit)
+wilcox.test(meiotic.meioticpostmeiotic.postmeiotic$alpha, mitotic$alpha)
+ks.test(meiotic.meioticpostmeiotic.postmeiotic$alpha, mitotic$alpha)
+
+wilcox.test(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, mitotic.a$alpha)
+ks.test(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, mitotic.a$alpha)
+
+# wilcox alpha new genes only (hap vs mit) nada =/
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=='new'), subset(mitotic$alpha, mitotic$age=='new'))
+#ks.test(subset(meiotic.meioticpostmeiotic.postmeiotic$alpha, meiotic.meioticpostmeiotic.postmeiotic$age=='new'), subset(mitotic$alpha, mitotic$age=='new'))
+
+#wilcox.test(subset(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, meiotic.meioticpostmeiotic.postmeiotic.a$age=='new'), subset(mitotic.a$alpha, mitotic.a$age=='new'))
+#ks.test(subset(meiotic.meioticpostmeiotic.postmeiotic.a$alpha, meiotic.meioticpostmeiotic.postmeiotic.a$age=='new'), subset(mitotic.a$alpha, mitotic.a$age=='new'))
 
