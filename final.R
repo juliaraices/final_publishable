@@ -3,10 +3,14 @@
 # - make controls
 # - make graphs 1, 2, 3, 4, suplementals et al
 
+divas <- read.table("input/melsubgroup_analysis_results_flydivas_v1.2", header=T, sep = "\t")
 # reads the output
 total <- read.table("output/final.output", header=T)
 total$age <- factor(total$age, levels=c("old","new"))
 total$dnds <- as.numeric(total$dnds)
+# cross my output with flydivas output using cg column from flydivas and id from my output 
+mydivas <- merge(total, divas, by.x="id", by.y = "cg")
+a.mydivas <- subset(mydivas, mydivas$XorA=="A") # only autosomal genes
 # creates a subgroup of autosomal genes
 total.a <- subset(total, total$XorA=="A")
 # creates a subset for genes with dN data (positive selection signature)
@@ -42,6 +46,7 @@ text(x=c(3.6,6.6,5), y=c(30,32,52), labels=c("***", "***", "***"), cex=3)
 segments(2.8,28,4.2,28, cex=2, lwd=4)
 segments(5.8,30,7.2,30, cex=2, lwd=4)
 segments(2.8,50,7.2,50, cex=2,lwd=4)
+text(x=c(1.5,2.5,4.5,5.5,7.5,8.5), y=c(rep(11,6)), labels=c(matx[1,1], matx[2,1], matx[1,2], matx[2,2], matx[1,3], matx[2,3]), cex=1.5)
 legend(x=7, y=60, inset=c(-5,-0.5),legend=c("new genes", "old genes"), fill=c("gray","dimgray"), bty="n", cex=1.5, xpd = T)
 dev.off() 
 pdf("figure1_bw_pt.pdf")#, res=300)
@@ -52,6 +57,7 @@ text(x=c(3.6,6.6,5), y=c(30,32,52), labels=c("***", "***", "***"), cex=3)
 segments(2.8,28,4.2,28, cex=2, lwd=4)
 segments(5.8,30,7.2,30, cex=2, lwd=4)
 segments(2.8,50,7.2,50, cex=2,lwd=4)
+text(x=c(1.5,2.5,4.5,5.5,7.5,8.5), y=c(rep(11,6)), labels=c(matx[1,1], matx[2,1], matx[1,2], matx[2,2], matx[1,3], matx[2,3]), cex=1.5)
 legend(x=6, y=60, inset=c(-5,-0.5),legend=c("genes novos", "genes antigos"), fill=c("gray","dimgray"), bty="n", cex=1.5, xpd = T)
 dev.off() 
 ########## Color ##########
@@ -63,6 +69,7 @@ text(x=c(3.6,6.6,5), y=c(30,32,52), labels=c("***", "***", "***"), cex=3)
 segments(2.8,28,4.2,28, cex=2, lwd=4)
 segments(5.8,30,7.2,30, cex=2, lwd=4)
 segments(2.8,50,7.2,50, cex=2,lwd=4)
+text(x=c(1.5,2.5,4.5,5.5,7.5,8.5), y=c(rep(11,6)), labels=c(matx[1,1], matx[2,1], matx[1,2], matx[2,2], matx[1,3], matx[2,3]), cex=1.5)
 legend(x=7, y=60, inset=c(-5,-0.5),legend=c("new genes", "old genes"), fill=c("salmon","powderblue"), bty="n", cex=1.5, xpd = T)
 dev.off()
 pdf("figure1_color_pt.pdf")#, res=300)
@@ -73,297 +80,159 @@ text(x=c(3.6,6.6,5), y=c(30,32,52), labels=c("***", "***", "***"), cex=3)
 segments(2.8,28,4.2,28, cex=2, lwd=4)
 segments(5.8,30,7.2,30, cex=2, lwd=4)
 segments(2.8,50,7.2,50, cex=2,lwd=4)
+text(x=c(1.5,2.5,4.5,5.5,7.5,8.5), y=c(rep(11,6)), labels=c(matx[1,1], matx[2,1], matx[1,2], matx[2,2], matx[1,3], matx[2,3]), cex=1.5)
 legend(x=6, y=60, inset=c(-5,-0.5),legend=c("genes novos", "genes antigos"), fill=c("salmon","powderblue"), bty="n", cex=1.5, xpd = T)
 dev.off()
 
 ###################### Figure 2 #################################
 # boxplot with dn/ds and alpha values
-# dados a serem utilizados: genes autossomicos coom valores de dn/ds e alpha, dos grupos equal, mitótico e mmpp (Meiotic + MeioticPostMeiotic + Postmeiotic)
-mitotic.a <- subset(al, al$XorA=='A' & al$Group=='Mitotic')
-mmpp.a <- subset(al, al$XorA=='A' & al$Group=='Meiotic' | al$Group=='PostMeiotic' |  al$Group=='MeioticPostmeiotic')
-control.8 <- subset(al, al$XorA=='A' & al$Group=='Equal' & al$PostMeiosis>=(median(mmpp.a$PostMeiosis)-2)) #mei.meipos.pos$Pos
-if(wilcox.test(mmpp.a$PostMeiosis, control.8$PostMeiosis)$p.value <= 0.05) print("FUCK 8")
-control.mit <- subset(al, al$XorA=='A' & al$Group=='Equal' & al$Mitosis>=(median(mitotic.a$Mitosis)-2.3))
-if(wilcox.test(mitotic.a$Mitosis, control.mit$Mitosis)$p.value <= 0.05) print("FUCK MIT")
-eqa <- subset(al, al$XorA=='A' & al$Group=='Equal')
-# estatísticas:
-wilcox.test(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new")) # 4.522e-12 p tot e al
-wilcox.test(subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new")) # <2.2e-16 p tot e al
-wilcox.test(mitotic.a$dnds, eqa$dnds) # 0.002177 p al | < 2.2e-16 p eq
-wilcox.test(mmpp.a$dnds, eqa$dnds) # 0.01504 p al | 0.02769 p eq
-wilcox.test(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new")) # 0.289 p tot e al
-wilcox.test(subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new")) # 0.013 p tot e al
-wilcox.test(mitotic.a$alpha, eqa$alpha) # 0.3757 p al | 2.457e-06 p eq
-wilcox.test(mmpp.a$alpha, eqa$alpha) # 0.1604 p al | 0.0001575 p eq
-########## BW ##########
-pdf("figure2_bw_cont.pdf")#, res=100)#, width=10, height=10)
+# dados a serem utilizados: genes autossomicos com valores de dn/ds e alpha, dos grupos mitótico e haplóide (Meiotic + MeioticPostMeiotic + Postmeiotic)
+int <- subset(al, al$XorA=="A" & al$Group!="Impossible" & al$Group!="Equal" & al$Group!="TheV")
+mit <- subset(int, int$Group=='Mitotic')
+hap <- subset(int, int$Group=='Meiotic' | int$Group=='MeioticPostmeiotic' | int$Group=='PostMeiotic')
+wilcox.test(subset(int$dnds, int$age=='old'), subset(int$dnds, int$age=='new'))
+wilcox.test(subset(mit$dnds, mit$age=='old'), subset(hap$dnds, hap$age=='old'))
+wilcox.test(mit$dnds, hap$dnds)
+wilcox.test(subset(mit$alpha, mit$age=='old'), subset(hap$alpha, hap$age=='old'))
+#flydivas
+interest.a <- subset(a.mydivas, a.mydivas$Group!="TheV" | a.mydivas$Group!="Impossible" | a.mydivas!="Equal")
+interest.a.old <- subset(interest.a, interest.a$age=='old')
+interest.a.new <- subset(interest.a, interest.a$age=='new')
+new.old.a.interest <- matrix(data=c(length(subset(interest.a.new$id, interest.a.new$pos78=='does' | interest.a.new$pos_12=='does' | interest.a.new$pos_88a=='does')), (length(interest.a.new$id) - length(subset(interest.a.new$id, interest.a.new$pos78=='does' | interest.a.new$pos_12=='does' | interest.a.new$pos_88a=='does'))), length(subset(interest.a.old$id, interest.a.old$pos78=='does' | interest.a.old$pos_12=='does' | interest.a.old$pos_88a=='does')), (length(interest.a.old$id) - length(subset(interest.a.old$id, interest.a.old$pos78=='does' | interest.a.old$pos_12=='does' | interest.a.old$pos_88a=='does')))), ncol=2)
+new.old.a.interest.p <- prop.table(new.old.a.interest, 2)*100
+fisher.test(new.old.a.interest) # between new and old genes from interest groups (all but equal, impossible e theV), there is no difference in the number of genes with positive selection markers (p = 0.2635)
+# testing between haploid group and mitotic group genes
+hap.a <- subset(a.mydivas, a.mydivas$HaploidGroup=='haploid_group')
+mit.a <- subset(a.mydivas, a.mydivas$Group=='Mitotic')
+mit.hap.a.test <- matrix(data=c(length(subset(hap.a$id, hap.a$pos78=='does' | hap.a$pos_12=='does' | hap.a$pos_88a=='does')), (length(hap.a$id) - length(subset(hap.a$id, hap.a$pos78=='does' | hap.a$pos_12=='does' | hap.a$pos_88a=='does'))), length(subset(mit.a$id, mit.a$pos78=='does' | mit.a$pos_12=='does' | mit.a$pos_88a=='does')), (length(mit.a$id) - length(subset(mit.a$id, mit.a$pos78=='does' | mit.a$pos_12=='does' | mit.a$pos_88a=='does')))), ncol=2)
+mit.hap.a.test.p <- prop.table(mit.hap.a.test, 2)*100
+fisher.test(mit.hap.a.test) # there are more autosomal genes with signatures of poositive selection in the haploid group then in the mitotic group (p = 2.795e-06)
+bab <- apply(new.old.a.interest.p, 1, rev)
+bab <- apply(bab, 1, rev)
+beb <- apply(mit.hap.a.test.p, 1, rev)
+beb <- apply(beb, 1, rev)
+pdf("figure2_bw.pdf")#, res=100)#, width=10, height=10)
 par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
 ## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-    subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"),
-    col=c("dimgrey", "grey"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=3)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, control.mit$dnds,
-        mmpp.a$dnds, control.8$dnds,
-        col=c("Grey 20", "Grey 42"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=3)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("dimgrey", "grey"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    text(x=c(3.5), y=c(-1.7), labels=c("***"), cex=3)
-    text(x=c(1.5), y=c(-2), labels=c("p = 0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, control.mit$alpha,
-        mmpp.a$alpha, control.8$alpha,
-        col=c("Grey 20", "Grey 42"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="*", cex=2.5)
-    text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(subset(int$dnds, int$age=="old"), subset(int$dnds, int$age=="new"),
+        col=c("ivory3", "ivory3"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Old", "New"), cex.axis=1.5, lwd=0)
+legend(x=0, y=-0.87, inset=0.01, legend=c("w/o selection", "w/ selection"), fill=c("dimgrey","grey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+text(x=c(1.5), y=c(2), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(subset(int$dnds, int$age=='old'))$stats[5]+0.1), (boxplot.stats(subset(int$dnds, int$age=='new'))$stats[5] + 0.1)), labels=c(length(subset(int$dnds, int$age=="old")), length(subset(int$dnds, int$age=="new"))))
+mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(mit$dnds, hap$dnds, col=c("ivory3"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
+text(x=c(1.5), y=c(1.5), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(mit$dnds)$stats[5]+0.1), (boxplot.stats(hap$dnds)$stats[5]+0.1)), labels = c(length(mit$dnds), length(hap$dnds)))
+mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+### % ###
+barplot(bab, col = c("dimgrey","grey"), xpd=F, xlab = "", ylab="Genes Percentage", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Old", "New"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(new.old.a.interest[2,2], new.old.a.interest[1,2], new.old.a.interest[2,1], new.old.a.interest[1,1]), cex=1)
+mtext("(c)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
+barplot(beb, col = c("dimgrey","grey"), xpd=F, xlab = "", ylab="Genes Percentage", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(mit.hap.a.test[2,2], mit.hap.a.test[1,2], mit.hap.a.test[2,1], mit.hap.a.test[1,1]), cex=1)
+mtext("(d)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
 dev.off()
-pdf("figure2_bw_cont_pt.pdf")#, res=100)#, width=10, height=10)
+pdf("figure2_bw_pt.pdf")#, res=100)#, width=10, height=10)
 par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
 ## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-    subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"),
-    col=c("dimgrey", "grey"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("novos", "antigos"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=3)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, control.mit$dnds,
-        mmpp.a$dnds, control.8$dnds,
-        col=c("Grey 20", "Grey 42"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Controle"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=3)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("dimgrey", "grey"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    text(x=c(3.5), y=c(-1.7), labels=c("***"), cex=3)
-    text(x=c(1.5), y=c(-2), labels=c("p = 0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, control.mit$alpha,
-        mmpp.a$alpha, control.8$alpha,
-        col=c("Grey 20", "Grey 42"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="*", cex=2.5)
-    text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-dev.off()
-pdf("figure2_bw_eq.pdf")#, res=100)#, width=10, height=10)
-par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
-## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-    subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"),
-    col=c("dimgrey", "grey"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1, lwd=0)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, mmpp.a$dnds, eqa$dnds,
-        col=c("Grey 20", "Grey 20", "Grey 42"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitotic", "Haploid", "Equal"), cex.axis=1, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    segments(1,2.1,3,2.1, cex=1, lwd=2)
-    segments(2,1.6,3,1.6, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(2.25, 1.75), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("dimgrey", "grey"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1, lwd=0)
-    text(x=c(3.5), y=c(-1.7), labels=c("***"), cex=3)
-    text(x=c(1.5), y=c(-2), labels=c("p = 0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, mmpp.a$alpha, eqa$alpha,
-        col=c("Grey 20", "Grey 42"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitotic", "Haploid", "Equal"), cex.axis=1, lwd=0)
-    segments(1,-3.5,3,-3.5, cex=1, lwd=2)
-    segments(2,-2,3,-2, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(-3.35, -1.85), labels=c("***", "***"), cex=2.5)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-dev.off()
-pdf("figure2_bw_eq_pt.pdf")#, res=100)#, width=10, height=10)
-par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
-## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-    subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"),
-    col=c("dimgrey", "grey"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitótica", "Haplóide"), cex.axis=1, lwd=0)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("novos", "antigos"), fill=c("grey","dimgrey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, mmpp.a$dnds, eqa$dnds,
-        col=c("Grey 20", "Grey 20", "Grey 42"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitótica", "Haplóide", "Constante"), cex.axis=1, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Controle"), fill=c("Grey 20","Grey 42"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    segments(1,2.1,3,2.1, cex=1, lwd=2)
-    segments(2,1.6,3,1.6, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(2.25, 1.75), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("dimgrey", "grey"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1, lwd=0)
-    text(x=c(3.5), y=c(-1.7), labels=c("***"), cex=3)
-    text(x=c(1.5), y=c(-2), labels=c("p = 0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, mmpp.a$alpha, eqa$alpha,
-        col=c("Grey 20", "Grey 42"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitótica", "Haplóide", "Constante"), cex.axis=1, lwd=0)
-    segments(1,-3.5,3,-3.5, cex=1, lwd=2)
-    segments(2,-2,3,-2, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(-3.35, -1.85), labels=c("***", "***"), cex=2.5)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(subset(int$dnds, int$age=="old"), subset(int$dnds, int$age=="new"),
+        col=c("ivory3", "ivory3"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Antigos", "Novos"), cex.axis=1.5, lwd=0)
+legend(x=0, y=-0.87, inset=0.01, legend=c("sem seleção", "com seleção"), fill=c("dimgrey","grey"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+text(x=c(1.5), y=c(2), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(subset(int$dnds, int$age=='old'))$stats[5]+0.1), (boxplot.stats(subset(int$dnds, int$age=='new'))$stats[5] + 0.1)), labels=c(length(subset(int$dnds, int$age=="old")), length(subset(int$dnds, int$age=="new"))))
+mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(mit$dnds, hap$dnds,
+        col=c("ivory3"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Mitótico", "Haplóide"), cex.axis=1.5, lwd=0)
+text(x=c(1.5), y=c(1.5), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(mit$dnds)$stats[5]+0.1), (boxplot.stats(hap$dnds)$stats[5]+0.1)), labels = c(length(mit$dnds), length(hap$dnds)))
+mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+## % ##
+barplot(bab, col = c("dimgrey","grey"), xpd=F, xlab = "", ylab="Porcentagem de genes", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Antigos", "Novos"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(new.old.a.interest[2,2], new.old.a.interest[1,2], new.old.a.interest[2,1], new.old.a.interest[1,1]), cex=1)
+legend(x=6, y=60, inset=c(-5,-0.5),legend=c("com seleção", "sem seleção"), fill=c("dimgrey","grey"), bty="n", cex=1.5, xpd = T)
+mtext("(c)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
+barplot(beb, col = c("dimgrey","grey"), xpd=F, xlab = "", ylab="Porcentagem de genes", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Mitótico", "Haplóide"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(mit.hap.a.test[2,2], mit.hap.a.test[1,2], mit.hap.a.test[2,1], mit.hap.a.test[1,1]), cex=1)
+mtext("(d)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
 dev.off()
 ########## Color ##########
-pdf("figure2_color_cont.pdf")#, res=300)#, width=10, height=10)
+pdf("figure2_color.pdf")#, res=300)#, width=10, height=10)
 par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
 ## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-        subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"), 
-        col=c("powderblue", "salmon"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, control.mit$dnds,
-        mmpp.a$dnds, control.8$dnds,
-        col=c("pink", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("powderblue", "salmon"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="***", cex=2.5)
-    text(x=c(1.5), y=c(-1.85), labels=c("p=0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, control.mit$alpha,
-        mmpp.a$alpha, control.8$alpha,
-        col=c("pink", "plum"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="*", cex=2.5)
-    text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(subset(int$dnds, int$age=="old"), subset(int$dnds, int$age=="new"),
+        col=c("plum", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1.5,3.5), labels=c("Old", "New"), cex.axis=1.5, lwd=0)
+legend(x=0, y=-0.87, inset=0.01, legend=c("w/o selection", "w/ selection"), fill=c("orchid4","orchid1"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+text(x=c(1.5), y=c(2), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(subset(int$dnds, int$age=='old'))$stats[5]+0.1), (boxplot.stats(subset(int$dnds, int$age=='new'))$stats[5] + 0.1)), labels=c(length(subset(int$dnds, int$age=="old")), length(subset(int$dnds, int$age=="new"))))
+mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(mit$dnds, hap$dnds,
+        col=c("plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
+text(x=c(1.5), y=c(1.5), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(mit$dnds)$stats[5]+0.1), (boxplot.stats(hap$dnds)$stats[5]+0.1)), labels = c(length(mit$dnds), length(hap$dnds)))
+mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+## % ##
+barplot(bab, col = c("orchid4","orchid1"), xpd=F, xlab = "", ylab="Genes Percentage", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Old", "New"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(new.old.a.interest[2,2], new.old.a.interest[1,2], new.old.a.interest[2,1], new.old.a.interest[1,1]), cex=1)
+legend(x=6, y=60, inset=c(-5,-0.5),legend=c("w/ selection", "w/o selection"), fill=c("orchid4","orchid1"), bty="n", cex=1.5, xpd = T)
+mtext("(c)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
+barplot(beb, col = c("orchid4","orchid1"), xpd=F, xlab = "", ylab="Genes Percentage", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Mitotic", "Haploid"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(mit.hap.a.test[2,2], mit.hap.a.test[1,2], mit.hap.a.test[2,1], mit.hap.a.test[1,1]), cex=1)
+mtext("(d)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
 dev.off()
-pdf("figure2_color_cont_pt.pdf")#, res=300)#, width=10, height=10)
+pdf("figure2_color_pt.pdf")#, res=300)#, width=10, height=10)
 par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
 ## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-        subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"), 
-        col=c("powderblue", "salmon"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("novos", "antigos"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, control.mit$dnds,
-        mmpp.a$dnds, control.8$dnds,
-        col=c("pink", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Controle"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(rep(1.5, 2)), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("powderblue", "salmon"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="***", cex=2.5)
-    text(x=c(1.5), y=c(-1.85), labels=c("p=0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, control.mit$alpha,
-        mmpp.a$alpha, control.8$alpha,
-        col=c("pink", "plum"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1.5, lwd=0)
-    text(x=3.5, y=-1.7, labels="*", cex=2.5)
-    text(x=c(1.5), y=c(-2), labels=c("p=0.250"), cex=1)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-dev.off()
-pdf("figure2_color_eq.pdf")#, res=300)#, width=10, height=10)
-par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
-## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-        subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"), 
-        col=c("powderblue", "salmon"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitotic", "Haploid"), cex.axis=1, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("new", "old"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, mmpp.a$dnds, eqa$dnds,
-        col=c("pink", "pink", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitotic", "Haploid", "Equal"), cex.axis=1, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Control"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    segments(1,2.1,3,2.1, cex=1, lwd=2)
-    segments(2,1.6,3,1.6, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(2.25, 1.75), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("powderblue", "salmon"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitotic", "Haploid"), cex.axis=1, lwd=0)
-    text(x=3.5, y=-1.7, labels="***", cex=2.5)
-    text(x=c(1.5), y=c(-1.85), labels=c("p=0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, mmpp.a$alpha, eqa$alpha,
-        col=c("pink", "pink", "plum"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitotic", "Haploid", "Equal"), cex.axis=1, lwd=0)
-    segments(1,-3.5,3,-3.5, cex=1, lwd=2)
-    segments(2,-2,3,-2, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(-3.35, -1.85), labels=c("***", "***"), cex=2.5)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-dev.off()
-pdf("figure2_color_eq_pt.pdf")#, res=300)#, width=10, height=10)
-par(mfrow=c(2,2), mar=c(4,4,3,2)+0.1)
-## dN/dS ##
-boxplot(subset(mitotic.a$dnds, mitotic.a$age=="old"), subset(mitotic.a$dnds, mitotic.a$age=="new"),
-        subset(mmpp.a$dnds, mmpp.a$age=="old"), subset(mmpp.a$dnds, mmpp.a$age=="new"), 
-        col=c("powderblue", "salmon"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1.5,3.5), labels=c("Mitótica", "Haplóide"), cex.axis=1, lwd=0)
-    legend(x=1, y=-0.87, inset=0.01, legend=c("novos", "antigos"), fill=c("salmon","powderblue"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    text(x=c(seq(1.5,3.5, by=2)), y=c(2.6, 2), labels=c(rep("***", 2)), cex=2.5)
-    mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$dnds, mmpp.a$dnds, eqa$dnds,
-        col=c("pink", "pink", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitótica", "Haplóide", "Constante"), cex.axis=1, lwd=0)
-    legend(x=0, y=-0.87, inset=-0.01, legend=c("Experimental", "Controle"), fill=c("pink","plum"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
-    segments(1,2.1,3,2.1, cex=1, lwd=2)
-    segments(2,1.6,3,1.6, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(2.25, 1.75), labels=c("***", "***"), cex=2.5)
-    mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-## alpha ##
-boxplot(subset(mitotic.a$alpha, mitotic.a$age=="old"), subset(mitotic.a$alpha, mitotic.a$age=="new"),
-        subset(mmpp.a$alpha, mmpp.a$age=="old"), subset(mmpp.a$alpha, mmpp.a$age=="new"),
-        col=c("powderblue", "salmon"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(seq(1.5,3.5, by=2)), labels=c("Mitótica", "Haplóide"), cex.axis=1, lwd=0)
-    text(x=3.5, y=-1.7, labels="***", cex=2.5)
-    text(x=c(1.5), y=c(-1.85), labels=c("p=0.289"), cex=1)
-    mtext("(c)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
-boxplot(mitotic.a$alpha, mmpp.a$alpha, eqa$alpha,
-        col=c("pink", "pink", "plum"), ylim=c(-5,1), ylab="alpha", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
-    axis(1, at=c(1, 2, 3), labels=c("Mitótica", "Haplóide", "Constante"), cex.axis=1, lwd=0)
-    segments(1,-3.5,3,-3.5, cex=1, lwd=2)
-    segments(2,-2,3,-2, cex=1, lwd=2)
-    text(x=c(2, 2.5), y=c(-3.35, -1.85), labels=c("***", "***"), cex=2.5)
-    mtext("(d)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(subset(int$dnds, int$age=="old"), subset(int$dnds, int$age=="new"),
+        col=c("plum", "plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Antigos", "Novos"), cex.axis=1.5, lwd=0)
+legend(x=0, y=-0.87, inset=0.01, legend=c("com seleção", "sem seleção"), fill=c("orchid1","orchid4"), horiz=TRUE, cex=1.3, bty="n", xpd=TRUE)
+text(x=c(1.5), y=c(2), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(subset(int$dnds, int$age=='old'))$stats[5]+0.1), (boxplot.stats(subset(int$dnds, int$age=='new'))$stats[5] + 0.1)), labels=c(length(subset(int$dnds, int$age=="old")), length(subset(int$dnds, int$age=="new"))))
+mtext("(a)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+boxplot(mit$dnds, hap$dnds,
+        col=c("plum"), ylim=c(0,4), ylab="dN/dS", xaxt="n", cex.lab=1.5, cex.axis=1.5, cex.sub=1.5, outline=F)
+axis(1, at=c(1,2), labels=c("Mitótico", "Haplóide"), cex.axis=1.5, lwd=0)
+text(x=c(1.5), y=c(1.5), labels=c("***"), cex=3)
+text(x=c(1,2), y=c((boxplot.stats(mit$dnds)$stats[5]+0.1), (boxplot.stats(hap$dnds)$stats[5]+0.1)), labels = c(length(mit$dnds), length(hap$dnds)))
+mtext("(b)", 3, line=0.5, at=0, cex=1.5, xpd=TRUE)
+## % ##
+barplot(bab, col = c("orchid4","orchid1"), xpd=F, xlab = "", ylab="Porcentagem de genes", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Antigos", "Novos"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(new.old.a.interest[2,2], new.old.a.interest[1,2], new.old.a.interest[2,1], new.old.a.interest[1,1]), cex=1)
+legend(x=6, y=60, inset=c(-5,-0.5),legend=c("com seleção", "sem seleção"), fill=c("orchid4","orchid1"), bty="n", cex=1.5, xpd = T)
+mtext("(c)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
+barplot(beb, col = c("orchid4","orchid1"), xpd=F, xlab = "", ylab="Porcentagem de genes", cex.lab=1.5, cex.axis = 1.5, ylim=c(90,100), xaxt="n")
+axis(1, at=c(0.65, 1.95), labels=c("Mitótico", "Haplóide"), cex.axis=1.5, lwd=0)
+text(x=c(1.3), y=c(97), labels=c("***"), cex=3)
+segments(0.65,96.5,1.95,96.5, cex=2, lwd=4)
+text(x=c(0.65, 0.65, 1.95, 1.95), y=c(90.5, 99.5, 90.5, 99.5), labels=c(mit.hap.a.test[2,2], mit.hap.a.test[1,2], mit.hap.a.test[2,1], mit.hap.a.test[1,1]), cex=1)
+mtext("(d)", 3, line=1.1, at=0, cex=1.5, xpd=TRUE)
 dev.off()
 
 ######################## Figure 3 ####################################
