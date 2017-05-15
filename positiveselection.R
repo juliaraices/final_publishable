@@ -118,3 +118,32 @@ old.mit.hap.a.test.p <- prop.table(old.mit.hap.a.test, 2)*100
 
 fisher.test(old.mit.hap.a.test) # and it holds for old autosomal genes. since new genes usually have more signatures of positive selection, even when w remove them, we still have a higher amount of haploid genes with signatures of positive selection (p = 4.397e-06)
 
+################################ only model m1 X m2 #######################################
+
+new.old.interest.12 <- matrix(data=c(length(subset(interest.new$id, interest.new$pos_12=='does')), (length(interest.new$id) - length(subset(interest.new$id, interest.new$pos_12=='does'))), length(subset(interest.old$id, interest.old$pos_12=='does')), (length(interest.old$id) - length(subset(interest.old$id, interest.old$pos_12=='does')))), ncol=2)
+
+fisher.test(new.old.interest.12) # between new and old genes from interest groups (all but equal, impossible e theV), there is no difference in the number of genes with positive selection markers (p = 0.05762)
+
+new.old.mithap.12 <- matrix(data=c(length(subset(mithap.new$id, mithap.new$pos_12=='does')), (length(mithap.new$id) - length(subset(mithap.new$id, mithap.new$pos_12=='does'))), length(subset(mithap.old$id, mithap.old$pos_12=='does')), (length(mithap.old$id) - length(subset(mithap.old$id, mithap.old$pos_12=='does')))), ncol=2)
+
+fisher.test(new.old.mithap.12) # between new and old genes from mitotic+haploid groups there is no difference in the number of genes with and without positive selection markers (p = 0.163)
+
+new.old.hap.12 <- matrix(data=c(length(subset(hap.new$id, hap.new$pos_12=='does')), (length(hap.new$id) - length(subset(hap.new$id, hap.new$pos_12=='does'))), length(subset(hap.old$id, hap.old$pos_12=='does')), (length(hap.old$id) - length(subset(hap.old$id, hap.old$pos_12=='does')))), ncol=2)
+
+fisher.test(new.old.hap.12) # no significative difference in genes with or without positive selection between new and old genes from haploid group (p = 0.6663)
+
+new.old.mit.12 <- matrix(data=c(length(subset(mit.new$id, mit.new$pos_12=='does')), (length(mit.new$id) - length(subset(mit.new$id, mit.new$pos_12=='does'))), length(subset(mit.old$id, mit.old$pos_12=='does')), (length(mit.old$id) - length(subset(mit.old$id, mit.old$pos_12=='does')))), ncol=2)
+
+fisher.test(new.old.mit.12) # for mitotic genes, there is no difference in the number of genes with positive selection markers for new and old genes [small sample size] (p = 0.4199)
+
+# testing between haploid group and mitotic group genes
+mit.hap.test.12 <- matrix(data=c(length(subset(hap$id, hap$pos_12=='does')), (length(hap$id) - length(subset(hap$id, hap$pos_12=='does'))), length(subset(mit$id, mit$pos_12=='does')), (length(mit$id) - length(subset(mit$id, mit$pos_12=='does')))), ncol=2)
+
+fisher.test(mit.hap.test.12) # there is a significative difference in the number of genes with positive slection markers when comparing haploid group and mitotic genes (p = 3.042e-06), haploid group has more positively selected genes.
+
+old.mit.hap.test.12 <- matrix(data=c(length(subset(hap.old$id, hap.old$pos_12=='does')), (length(hap.old$id) - length(subset(hap.old$id, hap.old$pos_12=='does'))), length(subset(mit.old$id, mit.old$pos_12=='does')), (length(mit.old$id) - length(subset(mit.old$id, mit.old$pos_12=='does')))), ncol=2)
+
+fisher.test(old.mit.hap.test.12) # there is a significative difference in the number of genes with and without positive selection markers for old genes from mitotic and haploid groups (p = 7.766e-06)
+
+
+

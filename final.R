@@ -277,8 +277,8 @@ fisher.test(matrix(data=c(subset(datab$Count, datab$Age=='new' & datab$Group=='P
 chisq.test(matrix(data=c(subset(datab$Count, datab$Age=='new' & datab$Group=='PostMeiotic'), sum(subset(datab$Count, datab$Age=='new' & datab$Group!='PostMeiotic' & datab$Chromosome=='A')), sum(subset(datab$Count, datab$Age=='new' & datab$Group!='PostMeiotic' & datab$Chromosome=='X'))), nrow = 2)) # tot: 0.02671 | mmpp: 0.02031 | al: 0.07154
 # dados e funções pros gráficos:
 hline.data <- data.frame(z = c(aall, newaall), Age = c("old","new"))
-labs.data <- data.frame(s=c(2, 1, 3), f=c(0.878, 0.74, 0.905), z = c("***", "*", "***"), Age = c("old","new", "new"), Chromosome=c("A", "A", "A"))
-ps <- data.frame(a=c(1,3,1,2), b=c(0.834, 0.834, 0.74, 0.815), d=c("0.096", "0.493", "", "0.777"), Age=c("old", "old", "new", "new"), Chromosome=c("A", "A", "A", "A"))
+labs.data <- data.frame(s=c(2, 1, 3), f=c(0.878, 0.74, 0.905), z = c("***", "", "***"), Age = c("old","new", "new"), Chromosome=c("A", "A", "A"))
+ps <- data.frame(a=c(1,3,1,2), b=c(0.834, 0.834, 0.74, 0.815), d=c("0.096", "0.493", "0.059", "0.777"), Age=c("old", "old", "new", "new"), Chromosome=c("A", "A", "A", "A"))
 texto <- data.frame(x=c(rep(c(1,2,3),4)), y=c(rep(0.99, 6), rep(0.61, 6)), lab=c(x.count, a.count), Age=c(rep(c(rep("old",3), rep("new", 3)),2)))
 facet_names <- list(
     'old'="Old Genes",
@@ -490,19 +490,19 @@ mit <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Mitosis, colo
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Genes' age", y="Expression during Mitosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="0.1725") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("0.1725",length(subset(interest$Mitosis, interest$age=="old")),length(subset(interest$Mitosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 mei <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Meiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Genes' age", y="Expression during Meiosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$Meiosis, interest$age=="old")), length(subset(interest$Meiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pm <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$PostMeiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Genes' age", y="Expression during PostMeiosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$PostMeiosis, interest$age=="old")), length(subset(interest$PostMeiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pdf("figure7_bw.pdf")
 grid.arrange(arrangeGrob(mit, mei, pm,  nrow=1, ncol=3))
@@ -512,19 +512,19 @@ mit <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Mitosis, colo
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Idade dos Genes", y="Expressão durante a Mitose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="0.1725") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("0.1725",length(subset(interest$Mitosis, interest$age=="old")),length(subset(interest$Mitosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 mei <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Meiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Idade dos Genes", y="Expressão durante a Meiose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$Meiosis, interest$age=="old")), length(subset(interest$Meiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pm <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$PostMeiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("dimgrey", "grey")) +
     labs(x="Idade dos Genes", y="Expressão durante a Pós-Meiose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$PostMeiosis, interest$age=="old")), length(subset(interest$PostMeiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pdf("figure7_bw_pt.pdf")
 grid.arrange(arrangeGrob(mit, mei, pm,  nrow=1, ncol=3))
@@ -534,19 +534,19 @@ mit <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Mitosis, colo
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Genes' age", y="Expression during Mitosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="0.1725") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("0.1725",length(subset(interest$Mitosis, interest$age=="old")),length(subset(interest$Mitosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 mei <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Meiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Genes' age", y="Expression during Meiosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$Meiosis, interest$age=="old")), length(subset(interest$Meiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pm <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$PostMeiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Genes' age", y="Expression during PostMeiosis") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$PostMeiosis, interest$age=="old")), length(subset(interest$PostMeiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pdf("figure7_color.pdf")
 grid.arrange(arrangeGrob(mit, mei, pm,  nrow=1, ncol=3))
@@ -556,19 +556,19 @@ mit <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Mitosis, colo
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Idade dos Genes", y="Expressão durante a Mitose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="0.1725") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("0.1725",length(subset(interest$Mitosis, interest$age=="old")),length(subset(interest$Mitosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 mei <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$Meiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Idade dos Genes", y="Expressão durante a Meiose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$Meiosis, interest$age=="old")), length(subset(interest$Meiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pm <- ggplot(data.frame(interest), aes(x=interest$age, y=interest$PostMeiosis, color=age)) +
     geom_boxplot(notch = T) +
     scale_color_manual(values=c("powderblue", "salmon")) +
     labs(x="Idade dos Genes", y="Expressão durante a Pós-Meiose") + 
-    theme(legend.position = "none") + annotate("text", x=1.5, y=13.5, label="***") +ggtitle("") +
+    theme(legend.position = "none") + annotate("text", x=c(1.5,1,2), y=c(13.5,3,3), label=c("***", length(subset(interest$PostMeiosis, interest$age=="old")), length(subset(interest$PostMeiosis, interest$age=="new")))) +ggtitle("") +
     scale_y_continuous(limits = c(3, 15))
 pdf("figure7_color_pt.pdf")
 grid.arrange(arrangeGrob(mit, mei, pm,  nrow=1, ncol=3))
