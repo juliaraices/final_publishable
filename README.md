@@ -46,7 +46,6 @@ Once the output file is produced it is possible to run both [final.R](final.R) a
 
 `
 Rscript final.R
-
 Rscript positiveselection.R
 `
 
@@ -59,9 +58,9 @@ Rscript simulation.R
 Or run the following on R:
 
 `
-> source("simulation.R")
-> diploid_haploid_deriva(selection_coeficient, number_of_generations, number_of_simulations, frequency_recessive, population_size) # with drift
-> diploid_haploid_determinista(selection_coeficient, number_of_generations, frequency_recessive) # deterministic
+source("simulation.R")
+diploid_haploid_deriva(selection_coeficient, number_of_generations, number_of_simulations, frequency_recessive, population_size) # with drift
+diploid_haploid_determinista(selection_coeficient, number_of_generations, frequency_recessive) # deterministic
 `
 
 Once all the scripts have been ran, it is possible to run [images.sh](images.sh) to get .png and .jpg versions of the .pdf images.
